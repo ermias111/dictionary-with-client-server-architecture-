@@ -1,0 +1,187 @@
+<html lang="en">
+    
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Document</title>
+        <style>
+            body {
+                    background-image: url("ff.jpg");
+                }
+            .ad {
+                width: 400px;
+                border: 5px solid #4f3677;
+                border-radius: 10px;
+                padding: 10px;
+                margin: 100px auto;
+            }
+
+            section>div {
+                padding: 10px 0;
+            }
+
+            #adder {
+                visibility: hidden;
+                
+            }
+            #add_edit_txt{
+                font-size: 30px;
+            }
+
+            .lists{
+                text-decoration: none;
+                
+            }
+            #ulList li{
+                list-style: none;
+                
+                border-radius: 5px;
+                background-color: #d7eceb;
+            }
+
+            #logo{
+                font-family: cursive;
+            }
+        </style>
+    
+    </head>
+    
+    <body>
+            <button id = "loginFromPage" onclick="logoutFromPageHandler()">Logout</button>
+            <section class = "ad" id = "searchh">
+                <div id="logo">
+                    Simple Dictionary
+                </div>
+                <div id='search'>
+                    <input id="search-input" type="text" placeholder="Search">
+                    <button id='go'>Go</button>
+                </div>
+                <div id="response">
+                    <span class="word"></span> <span class="meaning"></span>
+                </div>
+                <button class = "ad_btns"  id = "add_btn">Add</button>
+                <button class = "ad_btns" id = "edit_btn">Edit</button>
+            </section>
+            <section  class = "ad" id = "adder">
+                <div >
+                    
+                        <span id = "add_edit_txt"></span><br/>
+                        word: <input id="add_input" type="text" placeholder="add"><br/>
+                        <span class = "txt_response"></span><br/>
+                        meaning: <textarea id = "txt_mean"> </textarea><br/>
+                        <button id = "submit">submit</button>
+                    
+                </div>
+            </section>
+            
+            <script>
+                let input = document.getElementById("search-input");
+                let goButton = document.getElementById("go");
+                let word = document.getElementsByClassName("word");
+                let meaning = document.getElementsByClassName("meaning");
+
+                let addButton = document.getElementById("add_btn");
+                let editButton = document.getElementById("edit_btn");
+
+                let adder_div = document.getElementById("adder");
+                let add_inp = document.getElementById("add_input");
+                let txt_mean = document.getElementById("txt_mean");
+                let submit = document.getElementById("submit");
+                let add_edit = document.getElementById("add_edit_txt");
+                let responseMessage = document.getElementsByClassName("txt_response");
+
+                goButton.onclick = function(){
+                    let httpRequest = new XMLHttpRequest();
+                    let input_text = input.value;
+                    httpRequest.onreadystatechange = function(){
+                        if(httpRequest.readyState == XMLHttpRequest.DONE){
+                            if(httpRequest.status == 200){
+                                meaning[0].innerHTML = httpRequest.responseText;
+                            }
+                        }
+                    }
+                    httpRequest.open("GET", "./dictionary?word=" + input_text, true);
+                    httpRequest.send();
+                }
+
+
+                input.oninput = function(){
+                    let httpRequest = new XMLHttpRequest();
+                    let input_text = input.value;
+                    httpRequest.onreadystatechange = function(){
+                        if(httpRequest.readyState == XMLHttpRequest.DONE){
+                            if(httpRequest.status == 200){
+                                meaning[0].innerHTML = httpRequest.responseText;
+                            }
+                        }
+                    }
+                    httpRequest.open("GET", "./suggest?word=" + input_text, true);
+                    httpRequest.send();
+                } 
+                
+                let add_edit_Clicked = 0;
+                addButton.onclick = function(){
+                    adder_div.style.visibility = "visible";
+                    add_edit.innerHTML = "Add Form";
+                    add_edit_Clicked = 1;
+                }
+
+                editButton.onclick = function(){
+                    adder_div.style.visibility = "visible";
+                    add_edit.innerHTML = "Edit Form";
+                    add_edit_Clicked = 2;
+                }
+
+                
+                submit.onclick = function(){
+                    
+                    let httpRequest = new XMLHttpRequest();
+                    let add_input_text = add_inp.value;
+                    let add_input_mean = txt_mean.value;
+                    if(add_edit_Clicked == 1){
+                            httpRequest.onreadystatechange = function(){
+                            if(httpRequest.readyState == XMLHttpRequest.DONE){
+                                if(httpRequest.status == 200){
+                                    
+                                    responseMessage[0].innerHTML = httpRequest.responseText;
+                                    
+                                    if(httpRequest.responseText == ""){
+                                        adder_div.style.visibility = "hidden";
+                                        window.alert("successfully Added");
+                                    }
+                                }
+                            }
+                        }
+                        httpRequest.open("GET", "./add?word=" + add_input_text + "&meaning=" + add_input_mean, true);
+                    }else if(add_edit_Clicked==2){
+                            httpRequest.onreadystatechange = function(){
+                            if(httpRequest.readyState == XMLHttpRequest.DONE){
+                                if(httpRequest.status == 200){
+                                    responseMessage[0].innerHTML = httpRequest.responseText;
+                                    
+                                    if(httpRequest.responseText == ""){
+                                        adder_div.style.visibility = "hidden";
+                                        window.alert("successfully edited");
+                                    }
+                                }
+                            }
+                        }
+                        httpRequest.open("GET", "./edit?word=" + add_input_text + "&meaning=" + add_input_mean, true);
+                    }
+                    
+                    httpRequest.send();
+                }
+
+                function loginFromPageHandler(){
+                    window.self.open("login.html", '_self');
+                }
+                function signinFromPageHandler(){
+                    window.self.open("signup.html", '_self');
+                }
+                function logoutFromPageHandler(){
+                    window.self.open("index.html", "_self");
+                }
+            </script>
+    </body>
+</html>

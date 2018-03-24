@@ -1,0 +1,73 @@
+<html lang="en">
+        
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta http-equiv="X-UA-Compatible" content="ie=edge">
+            <title>Document</title>
+            <style>
+                body {
+                    background-image: url("ff.jpg");
+                }
+                #signup{
+                    width: 400px;
+                    border: 5px solid #4f3677;
+                    padding: 10px;
+                    margin: 100px auto;
+                    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+                    border-radius: 10px; 
+                }
+            </style>
+    
+        </head>
+    
+    <body>
+            <section id = "signup">
+                    <form method="POST" action="http://localhost:3000/signup">
+                            
+                                first Name<br/>
+                                <input type = "text" id = "firstName"><br/>
+                                 <br/>
+                                Last Name<br/>
+                                <input type = "text" id = "LastName"><br/>
+                                <br/>
+                                User Name<br/>
+                                <input type = "text" id = "userName_inp"><br/>
+                                <br/>
+                                Password<br/>
+                                <input type = "password" id = "sign_password"><br/>
+                                <br/>
+                                Confirm Password<br/>
+                                <input type = "password" id = "confirm_pass"><br/>
+                                <br/>
+                                <br/>
+                                <button id = "signupBtn" onclick="signupHandler()">signup</button>
+                            
+                    </form>
+                    <span class = "response"></span>
+
+            </section>
+            <script>
+                let u_name = document.getElementById("userName_inp");
+                let u_pass = document.getElementById("sign_password");
+                let response = document.getElementsByClassName("response");
+                
+                function signupHandler(){
+                    let httpRequest = new XMLHttpRequest();
+                    let userName_text = u_name.value;
+                    let userName_pass = u_pass.value;
+
+                    httpRequest.onreadystatechange = function(){
+                        if(httpRequest.readyState == XMLHttpRequest.DONE){
+                            if(httpRequest.status == 200){
+                                response[0].innerHTML = httpRequest.responseText;
+                                window.location = "login.html";
+                            }
+                        }
+                    }
+                    httpRequest.open("GET", "./?u_name=" + userName_text + "&u_pass=" + userName_pass, true);
+                    httpRequest.send();
+                }
+            </script>
+    </body>
+</html>

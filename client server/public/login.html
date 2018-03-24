@@ -1,0 +1,66 @@
+<html lang="en">
+        
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta http-equiv="X-UA-Compatible" content="ie=edge">
+            <title>Document</title>
+            <style>
+                body {
+                    background-image: url("ff.jpg");
+                }
+                
+                #login{
+                    width: 400px;
+                    border: 5px solid #4f3677;
+                    border-radius: 10px; 
+                    padding: 10px;
+                    margin: 100px auto;
+                    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+                }
+            </style>
+    
+        </head>
+    
+    <body>
+            <section id = "login">
+                    <form method="POST" action="http://localhost:3000/login">
+                        
+                            User Name<br/>
+                            <br/>
+                            <input type = "text" id = "userName"><br/>
+                            
+                            <br/>
+
+                            Password<br/>
+                            <br/>
+                            <input type = "password" id = "password"><br/>
+                            <br/>
+                            <button id = "loginBtn" onclick="loginHandler()">Login</button>
+                        
+                    </form>
+                    <span class = "respo"></span>
+            </section>
+            <script>
+                let userName = document.getElementById("userName");
+                let userPass = document.getElementById("password");
+                //let ress = document.getElementsByClassName("respo");
+
+                function loginHandler(){
+                    let httpRequest = new XMLHttpRequest();
+                    let userName_text = userName.value;
+                    let userName_pass = userPass.value;
+                    httpRequest.onreadystatechange = function(){
+                        if(httpRequest.readyState == XMLHttpRequest.DONE){
+                            if(httpRequest.status == 200){
+                                //ress[0].innerHTML = httpRequest.responseText;
+                                window.location = "index2.html";
+                            }
+                        }
+                    }
+                    httpRequest.open("GET", "./?username=" + userName_text + "&password=" + userName_pass, true);
+                    httpRequest.send();
+                }
+            </script>
+    </body>
+</html>
